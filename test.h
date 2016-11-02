@@ -26,7 +26,7 @@ class NaiveBayes
 		void setTeachData(const int &pnum,const double &value);
 		void setPredictData(const int &i,const double &value);
 		void train();
-		void predict();
+		int predict();
 
 		void outlog(std::string str);
 		void outlog(double value);

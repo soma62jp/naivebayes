@@ -70,14 +70,27 @@ void NaiveBayes::train()
 }
 
 //void NaiveBayes::predict(const int &pnum)
-void NaiveBayes::predict()
+int NaiveBayes::predict()
 {
 	std::vector<double> likehood = gaussian_naive_bayes_predict(Testi);
+	double max = likehood[0];
+	int maxarg = 0;
 
+	for(int i=0;i<(int)likehood.size();i++){
+		if(max<likehood[i]){
+			max=likehood[i];
+			maxarg=i;
+		}
+	}
+
+#if 0
 	for(int i=0;i<(int)likehood.size();i++){
 		std::cout << likehood[i] << ",";	
 	}
 	std::cout << std::endl;	
+#endif
+
+	return maxarg;
 
 }
 
@@ -144,8 +157,10 @@ void NaiveBayes::get_gaussian_params(const std::vector< std::vector<double> >& i
 
 void NaiveBayes::gaussian_naive_bayes(std::vector< std::vector<double> >& input, const std::vector<double>& target)
 {
-	//double mean,variance;
-	//std::vector< std::vector<double> > likehood( patternnum , std::vector<double> (outputnum,0));
+#if 0
+	double mean,variance;
+	std::vector< std::vector<double> > likehood( patternnum , std::vector<double> (outputnum,0));
+#endif
 
 	get_gaussian_params(input, target);
 
@@ -195,6 +210,8 @@ int main()
 {
   int i;
   double input[150][4];
+  double teach[150];
+  int accuracy = 0;
 
   NaiveBayes nb(4,3,150);
 
@@ -236,10 +253,13 @@ int main()
 			}else{
 				if(token=="s"){
 					nb.setTeachData(cnt,0);
+					teach[cnt]=0;
 				}else if(token=="e"){
 					nb.setTeachData(cnt,1);
+					teach[cnt]=1;
 				}else{
 					nb.setTeachData(cnt,2);
+					teach[cnt]=2;
 				}
 			}
 			inputnum++;
@@ -257,8 +277,13 @@ int main()
 	nb.setPredictData(1,input[i][1]);
 	nb.setPredictData(2,input[i][2]);
 	nb.setPredictData(3,input[i][3]);
-	nb.predict();
+	std::cout <<teach[i] << "->" << nb.predict() << std::endl;
+	if(teach[i] == nb.predict()){
+		accuracy++;
+	}
   }
+
+  std::cout << "accuracy:" << (double)accuracy / 150 << std::endl;
 
   return 0;
 
