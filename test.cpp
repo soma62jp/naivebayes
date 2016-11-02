@@ -197,7 +197,7 @@ std::vector<double> NaiveBayes::gaussian_naive_bayes_predict(std::vector<double>
 		for(int k=0;k<inputnum;k++){
 			mean = means[j][k];
 			variance = variances[j][k];
-			//likehood[i][j]+=std::log(gaussian(Ii[i][k], mean, variance));
+			//likehood[j]+=std::log(gaussian(target[k], mean, variance));
 			likehood[j] += std::log( (double)classnums[j] / patternnum) + std::log(gaussian(target[k], mean, variance));
 		}
 	}
